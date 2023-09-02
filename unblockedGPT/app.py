@@ -9,9 +9,9 @@ if 'position' not in st.session_state:
     st.session_state.position = -1  # Position of the current display in history
 
 # API Keys (Replace with your actual API keys)
-openai_api_key = "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"
-stealthgpt_api_key = "332726c5452d9a60f1afb9bfbacd2c73916eab9095a2278a910cefbecb6065b0"
-gptzero_api_key = 'c85cb78caa0448bdb5724231a7a0c5cd'
+openai_api_key = "key"
+stealthgpt_api_key = "key"
+gptzero_api_key = 'key'
 
 # Title
 st.title('ChatGPT')
