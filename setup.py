@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unblockedGPT',
-    version='0.3',
+    version='0.3.1',
     packages=find_packages(),
     install_requires=[
         'streamlit',
@@ -12,7 +12,11 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'chat = unblockedGPT.run_app:run',
+            'unblockedGPT = unblockedGPT.run_app:run',
         ],
     },
 )
+
+def run():
+    os.system('streamlit run app.py')
+
