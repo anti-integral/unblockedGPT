@@ -9,7 +9,6 @@ setup(
         'requests',
         'openai',
         'pycryptodome',  # This provides the Crypto module
-        'base64'  # Note: base64 is a standard library module, so it's not necessary to list it here
     ],
     entry_points={
         'console_scripts': [
