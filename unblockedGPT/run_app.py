@@ -1,4 +1,7 @@
 import os
+import streamlit as st
 
 def run():
-    os.system('streamlit run app.py')
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    app_path = os.path.join(dir_path, 'app.py')
+    st.command(f"streamlit run {app_path}")
