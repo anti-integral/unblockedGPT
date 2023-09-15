@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unblockedGPT',
-    version='0.3.2',
+    version='0.3.3',
     packages=find_packages(),
     install_requires=[
         'streamlit',
@@ -18,5 +18,8 @@ setup(
 )
 
 def run():
-    os.system('streamlit run app.py')
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    app_path = os.path.join(dir_path, 'app.py')
+    st.command(f"streamlit run {app_path}")
+
 
