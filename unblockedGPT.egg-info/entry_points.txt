@@ -1,2 +1,2 @@
 [console_scripts]
-unblockedGPT = unblockedGPT.run_app:run
+chat = unblockedGPT.run_app:run
