@@ -12,7 +12,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'chat = unblockedGPT.run_app:run',
+            'chatt = unblockedGPT.run_app:run',
         ],
     },
 )
