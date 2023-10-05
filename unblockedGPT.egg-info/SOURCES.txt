@@ -8,6 +8,7 @@ unblockedGPT/auth.py
 unblockedGPT/commands.py
 unblockedGPT/detection.py
 unblockedGPT/rephrase.py
+unblockedGPT/testing.py
 unblockedGPT/typeresponse.py
 unblockedGPT.egg-info/PKG-INFO
 unblockedGPT.egg-info/SOURCES.txt
