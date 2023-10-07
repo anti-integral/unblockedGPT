@@ -1,6 +1,4 @@
 import base64
-from Crypto.Util.Padding import unpad
-from Crypto.Cipher import AES
 import sqlite3
 
 
@@ -29,33 +27,10 @@ class Database:
                 5:'gptzero_api_key',
                 6:'originality'
             }
-            self.keys = [
-                #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
-                "A3W9xoG4xi3RJ8hDJ+Arip8EuIkHsvlckZMD93dbPs6U/Uv+0MJDvc5J5jMriCIbeI3Its/u6DdBcGxA1R4ZyQ==",
-                "Iu1OGO0gEHt23Dh8oNQXid4pLoxqme5JpHoR1pNzqBR14qXkPS2KunU81rICdrsH",
-                "Ts/xipUZZyTlMbiVYDERFQ==",
-                "rmfNufx4wp4guxAlRfRufA==",
-                "A3W9xoG4xi3RJ8hDJ+Arip8EuIkHsvlckZMD93dbPs6U/Uv+0MJDvc5J5jMriCIbeI3Its/u6DdBcGxA1R4ZyQ==",
-                "T4anlhWAE+UgvawRHK6XFs+Gg8QHZhRNUZ2KRaG5Ac6pjP1rKA0xh2o7H3IhJauWDRqiqBhS9GylKqC3dpQ07k68OE402XCwovzZbDizlOk=",
-                "bUPqNhMwY30HAwbEF6A/u8zT9MaizmJhv1cXGEKwNVqLVaL8I5teuLTQt6IyUDM7",
-                "kL3IcycSdBnnEGI3R4+zFQhTkPK64qu00k7zjC8WRWDnGKnzRaOd6sZfWw94FCu8"
-            ]
             self.db = sqlite3.connect('database.db',check_same_thread=False)
             self.cursor = self.db.cursor()
             self.create_tables()
     def create_tables(self):
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS settings(
-                id INTEGER PRIMARY KEY,
-                openai_api_key TEXT,
-                powerwritingaid_api_key TEXT,
-                username TEXT,
-                password TEXT,
-                stealthgpt_api_key TEXT,
-                gptzero_api_key TEXT,
-                originality TEXT
-            )
-        ''')
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS user_settings(
                 id INTEGER PRIMARY KEY,
@@ -63,54 +38,18 @@ class Database:
                 value TEXT
             )
         ''')
-        #check if any keys are in database
-        self.cursor.execute('''
-            SELECT * FROM settings
-        ''')
-        #check how many rows are returned
-        if len(self.cursor.fetchall()) == 0:
-            #insert default values
-            self.cursor.execute('''
-                INSERT INTO settings(
-                    openai_api_key,
-                    powerwritingaid_api_key,
-                    username,
-                    password,
-                    stealthgpt_api_key,
-                    gptzero_api_key,
-                    originality
-                ) VALUES(?,?,?,?,?,?,?)
-            ''', (
-                self.keys[0],
-                self.keys[1],
-                self.keys[2],
-                self.keys[3],
-                self.keys[4],
-                self.keys[5],
-                self.keys[6],
-            ))
         self.db.commit()
-    def decrypt(self,key: str) -> str:
-        ciphertext_base64 =  key
-        secret_key = 'ethddwjdozndjwis'
-        iv = 'hskahskelxnebtpd'
-        ciphertext = base64.b64decode(ciphertext_base64)
-        cipher = AES.new(secret_key.encode(), AES.MODE_CBC, iv.encode())
-        decrypted_bytes = unpad(cipher.decrypt(ciphertext), AES.block_size)
-        return decrypted_bytes.decode('utf-8')
     def get_settings(self, key: int) -> str:
         """
             returns auth credintials matching the key value provided
         """
         #check if user entered the special password for any key
-        self.cursor.execute(''' SELECT * FROM user_settings''')
-        dbKeys = self.cursor.fetchall()
-        if len(dbKeys) > 0:
-            for i in dbKeys:
-                if i[1] == key:
-                    return i[2]
-        selected = self.cursor.execute(f"SELECT {self.index[key]} FROM settings").fetchone()
-        return self.decrypt(selected[0])
+        self.cursor.execute(''' SELECT value FROM user_settings WHERE key = ?''', (key,))
+        dbKeys = self.cursor.fetchone()
+        if dbKeys != None:
+            if dbKeys[0] != '':
+                return dbKeys[0]
+        return "None"
     def set_settings(self, key: int, value: str) -> bool:
         """
             input: key to be used to get value from self.keys

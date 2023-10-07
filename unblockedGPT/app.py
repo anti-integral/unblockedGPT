@@ -76,41 +76,47 @@ if st.button('Submit'):
 
 if user_input and st.session_state.submitFlag:
     st.session_state.submitFlag = False
-    openai.api_key = openai_api_key
-    try: 
-        response = openai.ChatCompletion.create(
-        model=model_selection,
-        messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": user_input}]
-    )
-        chatbot_response = response['choices'][0]['message']['content'].strip()
-        st.session_state.conversation.insert(0, {"user-input":user_input, "response": chatbot_response, "type": 1})
-        st.session_state.ai_detection_score[0] = ai_detection( chatbot_response, auth)
-        st.session_state.ai_detection_score[1] = ai_detection_2( chatbot_response, auth)
-        st.session_state.position += 1
-    except:
-        st.write("Invalid API Key")
-    
+    if openai_api_key != False:
+        openai.api_key = openai_api_key
+        try: 
+            response = openai.ChatCompletion.create(
+            model=model_selection,
+            messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": user_input}]
+        )
+            chatbot_response = response['choices'][0]['message']['content'].strip()
+            st.session_state.conversation.insert(0, {"user-input":user_input, "response": chatbot_response, "type": 1})
+            st.session_state.ai_detection_score[0] = ai_detection( chatbot_response, auth)
+            st.session_state.ai_detection_score[1] = ai_detection_2( chatbot_response, auth)
+            st.session_state.position += 1
+        except:
+            st.write("Invalid API Key")
+    else:
+        st.write("Please enter an API Key")
+        
 
         
 # Rephrase button
 if st.button('Rephrase Text'):
-    headers = {'api-token': stealthgpt_api_key, 'Content-Type': 'application/json'}
-    data = {'prompt': st.session_state.conversation[0]['response'], 'rephrase': True}
-    response = requests.post('https://stealthgpt.ai/api/stealthify', headers=headers, json=data)
-    if response.status_code == 200:
-        rephrased_text = response.json()
-        rephrased_text = rephrased_text['result']
-        st.session_state.conversation.insert(0, {"user-input":'Rephrase Text 1', "response": rephrased_text, "type": 0})
-        st.session_state.ai_detection_score[0] = ai_detection( rephrased_text, auth)
-        st.session_state.ai_detection_score[1] = ai_detection_2( rephrased_text, auth)
-    elif response.status_code == 401:
-        st.session_state.conversation.insert(0, {"user-input":'Rephrase Text 1', "response": 'Invalid API Key', "type": 0})
-        st.session_state.ai_detection_score[0] = "N/A"
-        st.session_state.ai_detection_score[1] = "N/A"
+    if stealthgpt_api_key != False:
+        headers = {'api-token': stealthgpt_api_key, 'Content-Type': 'application/json'}
+        data = {'prompt': st.session_state.conversation[0]['response'], 'rephrase': True}
+        response = requests.post('https://stealthgpt.ai/api/stealthify', headers=headers, json=data)
+        if response.status_code == 200:
+            rephrased_text = response.json()
+            rephrased_text = rephrased_text['result']
+            st.session_state.conversation.insert(0, {"user-input":'Rephrase Text 1', "response": rephrased_text, "type": 0})
+            st.session_state.ai_detection_score[0] = ai_detection( rephrased_text, auth)
+            st.session_state.ai_detection_score[1] = ai_detection_2( rephrased_text, auth)
+        elif response.status_code == 401:
+            st.session_state.conversation.insert(0, {"user-input":'Rephrase Text 1', "response": 'Invalid API Key', "type": 0})
+            st.session_state.ai_detection_score[0] = "N/A"
+            st.session_state.ai_detection_score[1] = "N/A"
+        else:
+            st.session_state.conversation.insert(0, {"user-input":'Rephrase Text 1', "response": 'Could not rephrase', "type": 0})
+            st.session_state.ai_detection_score[0] = "N/A"
+            st.session_state.ai_detection_score[1] = "N/A"
     else:
-        st.session_state.conversation.insert(0, {"user-input":'Rephrase Text 1', "response": 'Could not rephrase', "type": 0})
-        st.session_state.ai_detection_score[0] = "N/A"
-        st.session_state.ai_detection_score[1] = "N/A"
+        st.write("Please enter stealth API Key")
 
 # Rephrase button 2
 if st.button('Rephrase Text 2'):

@@ -1,4 +1,5 @@
-streamlit
+PyAutoGUI==0.9.54
+urllib3==1.26.15
 requests
 openai
-pycryptodome
+streamlit

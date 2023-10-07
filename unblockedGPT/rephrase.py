@@ -35,11 +35,17 @@ def rephrase_2(essay: str) -> dict:
     """
     # Define the request payload
     auth = Database.get_instance()
+    openai_api_key = auth.get_settings(0)
+    prowritingaid_api_key = auth.get_settings(1)
+    if openai_api_key == False:
+        return {'status':False, 'msg':"Please enter an openAI API Key"}
+    if prowritingaid_api_key == False:
+        return {'status':False, 'msg':"Please enter a prowritingaid API Key"}
     request_payload = {
         "prompt": {
             "essay": essay,
-            "openaiapikey": auth.get_settings(0),
-            "prowritingaidapikey": auth.get_settings(1),
+            "openaiapikey": openai_api_key,
+            "prowritingaidapikey": prowritingaid_api_key,
             "approach": "Creative",
             "context": True,
             "randomness": 5,
