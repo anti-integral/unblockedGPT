@@ -129,12 +129,25 @@ if st.button('Rephrase Text 2'):
         st.session_state.ai_detection_score[0] = "N/A"
         st.session_state.ai_detection_score[1] = "N/A"
 
+
+
 # Type response
 if st.button('Type Response'):
     #type the most recent, using keyboard inputs
     typeinator = Typeinator()
     time.sleep(5)
     typeinator.type(st.session_state.conversation[0]['response'])
+
+st.write('Timed Typing')
+minutes = st.number_input('Minutes to type response', min_value=0, max_value=1000, step=1)
+if st.button('Timed Type Response') and minutes != 0:
+    #type the most recent, using timed typing
+    st.write('Typing in 5 seconds...')
+    time.sleep(5)
+    typeinator = Typeinator()
+    typeinator.timeToType(st.session_state.conversation[0]['response'], minutes)
+    minutes = 0
+
 
 # Display conversation and rephrases
 st.write(f'<div style="text-align: right; color: blue;">AI Detection Score: {st.session_state.ai_detection_score[0]}</div>', unsafe_allow_html=True )

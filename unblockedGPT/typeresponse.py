@@ -36,9 +36,7 @@ class Typeinator():
         charTime = ((timeIn * 2) / 3)/characters
         #determine the amount of punctuation pauses
         punctuationPauseTime = (timeIn / 3) / punctuationPauses
-        #set the values and call type
-        holdDelay = self.delay
-        holdPunctuationPause = self.punctuationPause
+        #set the values and call type, a he
         self.delay = charTime
         self.punctuationPause = punctuationPauseTime
         self.type(text)
@@ -139,7 +137,6 @@ class Typeinator():
         
         #type the sentance and pause for any punctuation that is true
         if punctuation['comma'] or punctuation['simicolon'] or punctuation['explination'] or punctuation['question']:
-            print('punctuation')
             split = text
             #split sentance on commas if punctuation['comma'] is true, and replace the commas
             if punctuation['comma']:
@@ -173,9 +170,7 @@ class Typeinator():
                 #pause
                 time.sleep(self.punctuationPause)
                 pyautogui.typewrite(' '.join(words[index + 1:]), interval=self.delay)
-                print(' '.join(words[index + 1:]))
             else:
-                print(text)
                 pyautogui.typewrite(text, interval=self.delay)
                 time.sleep(self.punctuationPause)
         time.sleep(self.punctuationPause)
