@@ -50,7 +50,7 @@ class Database:
         if dbKeys != None:
             if dbKeys[0] != '':
                 return dbKeys[0]
-        print('no key found')
+        
         return False
     def set_settings(self, key: int, value: str) -> bool:
         """

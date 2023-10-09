@@ -1,2 +1,4 @@
 [console_scripts]
 chat = unblockedGPT.__main__:run
+test = unblockedGPT.__main__:test
+typetext = unblockedGPT.__main__:textToType
