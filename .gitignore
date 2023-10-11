@@ -1,2 +1,8 @@
 **/__pycache__/
-
+/pip-wheel-metadata/
+/build/
+/dist/
+/unblockedGPT.egg-info/
+/database.db
+/requires.txt
+/.DS_Store
