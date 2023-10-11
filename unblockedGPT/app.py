@@ -156,5 +156,5 @@ st.write("### Conversation:")
 for turn in st.session_state.conversation:
     if turn["type"] == 1: 
         st.write(f'<div style="color: blue; background-color:{ "#E6EFFF" if turn["type"] == 1 else "#DFFFDF"}; padding: 10px; border-radius: 12px; margin: 5px;"><b>You:</b> {turn["user-input"]}</div>', unsafe_allow_html=True)
-    st.write(f'<div style="color: black; background-color:{ "#A9A9A9" if turn["type"] == 1 else "#DFFFDF"}; padding: 10px; border-radius: 12px; margin: 5px;"><b>{"ChatGPT: " if turn["type"] == 1 else "Rephrase: "}</b> {turn["response"]}</div>', unsafe_allow_html=True)
+    st.write(f'<div style="color: black; background-color:{ "#DCDCDC " if turn["type"] == 1 else "#DFFFDF"}; padding: 10px; border-radius: 12px; margin: 5px;"><b>{"ChatGPT: " if turn["type"] == 1 else "Rephrase: "}</b> {turn["response"]}</div>', unsafe_allow_html=True)
     
