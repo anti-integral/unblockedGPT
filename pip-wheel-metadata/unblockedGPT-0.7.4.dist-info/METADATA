@@ -1,7 +1,0 @@
-Metadata-Version: 2.1
-Name: unblockedGPT
-Version: 0.7.4
-Summary: Placeholder
-Requires-Dist: PyAutoGUI ==0.9.54
-Requires-Dist: urllib3 ==1.26.15
-
