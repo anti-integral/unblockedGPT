@@ -1,6 +1,2 @@
-database.db
-unblockedGPT.egg-info
-unblockedGPT.egg-info/*
-unblockedGPT/__pycache__/*
-pip-wheel-metadata/*
+**/__pycache__/
 
