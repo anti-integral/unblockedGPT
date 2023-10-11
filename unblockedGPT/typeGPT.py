@@ -3,7 +3,12 @@ from unblockedGPT.auth import Database
 import openai
 import time
 
-def typeGPT():
+def typeGPT() -> None:
+    """
+        function that types the response of a prompt from GPT-3.5 or GPT-4
+        input: None
+        output: None
+    """
     auth = Database.get_instance()
     while True:
         #print selected model

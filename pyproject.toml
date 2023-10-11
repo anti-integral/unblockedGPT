@@ -16,4 +16,5 @@ dependencies = [
 [project.scripts]
 chat = "unblockedGPT.__main__:run"
 typetext = "unblockedGPT.__main__:textToType"
+typeGPT = "unblockedGPT.__main__:typeGPTCmd"
 

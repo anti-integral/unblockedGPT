@@ -1,6 +1,8 @@
-database.db
-unblockedGPT.egg-info
-unblockedGPT.egg-info/*
-unblockedGPT/__pycache__/*
-pip-wheel-metadata/*
-
+**/__pycache__/
+/pip-wheel-metadata/
+/build/
+/dist/
+/unblockedGPT.egg-info/
+/database.db
+/requires.txt
+/.DS_Store
