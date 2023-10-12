@@ -12,7 +12,7 @@ def run():
     
 def textToType(args = sys.argv):
     if "-h" in args or "--help" in args:
-        print("Usage: typetext -p [path to text file/file in curent dir] (optional) -t [time in minutes] (optional) -s [speed][paues] (inprogress)")
+        print("Usage: typetext -p [path to text file/file in curent dir] (optional) -t [time in minutes] (optional)")
         return
     if "-p" in args:
         path = args[args.index("-p") + 1]

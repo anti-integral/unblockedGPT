@@ -3,6 +3,7 @@ import random
 import string
 import sys
 import time
+import re
 class Typeinator():
     def __init__(self):
         self.delay = 0.02
@@ -18,28 +19,61 @@ class Typeinator():
         else:
             self.comandKey = 'ctrl'
     def timeToType(self, text: str, timeIn:int) -> None:
-        timeIn = timeIn * 60
         """
             function to type text given the minutes to type the str
             input: text to be typed, and minutes to type
             output: None
         """
-        #deterine the amount of punctuation pauses
-        punctuationPauses = 0
-        for char in text:
-            if char in ['.', '!', '?', ';']:
-                if char == '.':
-                    punctuationPauses += 1
-                punctuationPauses += 1
-        #determine the amount of characters to type
-        characters = len(text)
-        charTime = ((timeIn * 2) / 3)/characters
-        #determine the amount of punctuation pauses
-        punctuationPauseTime = (timeIn / 3) / punctuationPauses
-        #set the values and call type, a he
-        self.delay = charTime
-        self.punctuationPause = punctuationPauseTime
-        self.type(text)
+
+        #split text into 10 chunks at the end of a sentance
+        textGroups = re.findall(r'(.+?[.!?])(?:\s+|$)', text)
+        #join the chunks into 10 chunks
+        toType = []
+        breaks = True
+        while textGroups != []:
+            rand = random.randint(2, 6)
+            if len(textGroups) < rand:
+                rand = len(textGroups)
+            hold = textGroups[0:rand]
+            #remove the chunks that are to be joined
+            textGroups = textGroups[rand:]
+            #join 0 to rand chunks together
+            toType.append(' '.join(hold))
+        timeIn = timeIn * 60
+        #calculate the theorectical max time it would take to type the text
+        
+
+        for subtext in toType:
+            if len(subtext) > 0:
+                maxTime = len(subtext) * self.delay
+                punctuationPauses = 0
+                shortPunctuationPauses = 0
+
+                #count the number of punctuation pauses
+                for i in subtext:
+                    if i == '.' or i == '!' or i == '?':
+                        punctuationPauses += 1
+                    elif i == ',' or i == ';':
+                        shortPunctuationPauses += 1
+                #add the punctuation pauses to the max time
+                maxTime += punctuationPauses * 5
+                maxTime += shortPunctuationPauses * 3.5
+                #type the text and comapre the time it took to type it to the max time
+                startTime = time.time()
+                self.type(subtext)
+                endTime = time.time()
+                timeToType = endTime - startTime
+                timeToMatch = timeIn / len(toType)
+                if subtext != toType[-1]:
+                    #if the time to type is less than the time to match, sleep for the difference
+                    if timeToType < timeToMatch:
+                        time.sleep(timeToMatch - timeToType)
+                    else:
+                        print("Took too long to type section. The text may take longer than the time provided.")
+                
+
+        #take a random amount of the begining text to type and track the time it takes to type it
+        
 
     
     def type(self, text: str) -> None:
@@ -48,8 +82,6 @@ class Typeinator():
             input: text to be typed
             output: None
         """
-        #random 0.1 - 0.5 second delay between each letter
-        #self.delay = random.uniform(0.01, 0.2)
         if '...' in text:
             text = text.replace('...', './DOTS/')
         sentances = text.split('.')
@@ -82,6 +114,8 @@ class Typeinator():
                 self.writer(split[0])
                 pyautogui.hotkey(self.comandKey, 'shift', '8')
                 self.writer(split[1] + '')
+            
+            
                 
             else:
                 
@@ -116,49 +150,91 @@ class Typeinator():
                     self.writer(sentance)
       
     def writer(self, text:str):
-        punctuation = {
-            'comma': False,
-            'simicolon': False,
-            'explination': False,
-            'question': False,
-        }
 
+        punctuationFlag = False
+        punctuation = {
+            'comma': {'val':False, 'char':',', 'pause': 1},
+            'simicolon': {'val':False, 'char':';', 'pause': 2},
+            'explination': {'val':False, 'char':'!', 'pause': 3},
+            'question': {'val':False, 'char':'?', 'pause': 4},
+            'pause': {'val':False, 'char':'/P/', 'pause': 5},
+            'colon': {'val':False, 'char':':', 'pause': 6},
+            'custom': {'val':False, 'char':',', 'pause': 7},
+        }
+        pauseRef = [0]
+        customPauses = []
         # 60% chance to pause for 2.5 seconds after a comma
-        if ',' in text and random.random() < 0.60:
-            punctuation['comma'] = True
+        if ',' in text :
+            punctuation['comma']['val'] = True
+            punctuationFlag = True
         # 60% chance to pause for 2.5 seconds after a semicolon
-        if ';' in text and random.random() < 0.60:
-            punctuation['simicolon'] = True
+        if ';' in text:
+            punctuation['simicolon']['val'] = True
+            punctuationFlag = True
         # Pause for 2.5 seconds after every period, exclamation mark, or question mark
         if '!' in text:
-            punctuation['explination'] = True
+            punctuation['explination']['val'] = True
+            punctuationFlag = True
         if '?' in text:
-            punctuation['question'] = True
-        
+            punctuation['question']['val'] = True
+            punctuationFlag = True
+        if ':' in text:
+            punctuation['colon']['val'] = True
+            punctuationFlag = True
+        if '/P/' in text:
+            punctuation['pause']['val'] = True
+            punctuationFlag = True
+        pause_match = re.search(r'/(\d+)/', text)
+        if pause_match:
+            punctuation['custom']['val'] = True
+            punctuationFlag = True
+            customPauses = re.findall(r'/(\d+)/', text)
+            
         #type the sentance and pause for any punctuation that is true
-        if punctuation['comma'] or punctuation['simicolon'] or punctuation['explination'] or punctuation['question']:
-            split = text
+        if punctuationFlag:
+            split = [text]
+
             #split sentance on commas if punctuation['comma'] is true, and replace the commas
-            if punctuation['comma']:
-                split = text.split(',')
-                for i in range(len(split) - 1):
-                    split[i] += ','
-            if punctuation['simicolon']:
-                split = text.split(';')
-                for i in range(len(split) - 1):
-                    split[i] += ';'
-            if punctuation['explination']:
-                split = text.split('!')
-                for i in range(len(split) - 1):
-                    split[i] += '!'
-            if punctuation['question']:
-                split = text.split('?')
-                for i in range(len(split) - 1):
-                    split[i] += '?'
+            for key in punctuation:
+
+                if punctuation[key]['val']:
+                    for x in range(len(split)):
+                        if punctuation[key]['char'] in split[x] or re.search(r'/(\d+)/', split[x]):
+                            #split the sentance on the punctuation
+                            if key == 'custom':
+                                hold = re.split(r'/(\d+)/', split[x] )
+                                #remove string that was split on
+                                for i in customPauses:
+                                    if i in hold:
+                                        hold.remove(i)
+                                holdTime = [punctuation[key]['pause'] for i in range(len(hold) - 1)]
+
+                            else:
+                                hold = split[x].split(punctuation[key]['char'])
+                                holdTime = [punctuation[key]['pause'] for i in range(len(hold) - 1)]
+
+                            #add punctuation back to the end of each split
+                            if key != 'pause' and key != 'custom':
+                                for i in range(len(hold) - 1):
+                                    hold[i] += punctuation[key]['char']
+                            
+
+
+                            #add the split to the split list and remove the original sentance
+                            split[x:x+1] = hold
+                            #add the pause to the pause list
+                            pauseRef= pauseRef[:x] + holdTime + pauseRef[x:]
+
             for i in range(len(split)):
                 pyautogui.typewrite(split[i], interval=self.delay)
-                if i != len(split) - 1:
-                    time.sleep(self.punctuationPause)
+                
+                if punctuation['custom']['pause'] == pauseRef[i]:
+                    time.sleep(int(customPauses[0]))
+                    customPauses.pop(0)
+                else:
+                    time.sleep(self.getPauseTime(pauseRef[i]))
+                    
+            
         else:
             #check there is more than one word
             if ' ' in text:
@@ -168,30 +244,44 @@ class Typeinator():
                 pyautogui.typewrite(' '.join(words[:index]), interval=self.delay)
                 pyautogui.typewrite(' '+words[index]+' ', interval=self.delay)
                 #pause
-                time.sleep(self.punctuationPause)
+                time.sleep(self.getPauseTime(1))
                 pyautogui.typewrite(' '.join(words[index + 1:]), interval=self.delay)
             else:
                 pyautogui.typewrite(text, interval=self.delay)
-                time.sleep(self.punctuationPause)
-        time.sleep(self.punctuationPause)
+                time.sleep(self.getPauseTime(1))
+        #time.sleep(self.punctuationPause)
+    def getPauseTime(self, key:int = 0)-> float:
+        """
+            given a key, return the pause time
+            input: key
+            output: pause time in seconds
+        """
+        pauseTime = {
+            0: [3.5,5],
+            1: [2.5,3.5],
+            2: [2.5,3.5],
+            3: [3.5,5],
+            4: [3.5,5],
+            5: [3.5,5],
+            6: [2.5,3.5],
+        }
+        #create random float between puasetime['key'][0 and 1] and return it as a float with 2 decimal places
+        return round(random.uniform(pauseTime[key][0], pauseTime[key][1]), 2)
+
 
 if __name__ == '__main__':
 
-    exampleParagraph = """This is an example paragraph using all the funtions above. /I/This is an italic sentance./I/ /B/This is a bold sentance./B/ /U/This is an underlined sentance./U/ and here are some more...
-Testing for the mispelling function. bigwords, forthcoming bigs..
-beofre bullets
- first bullet
- Thentences.%
+    exampleParagraph = """
 more conent... and more content...
-beofre bullets/+/ first bullet
-This is a bullet point.
-another
+beofre bullets/+/ first bul/P/let
+This is a bul/5/let point.
+another me.
 another
 /-/
 /T/after the bullets.
 
 
-Lorem ipsum doldictum lorem. Pellentesque congue tincidunt ipsum vel rhoncus. Vivamus vestibulum, augue non pharetra tristique, nisi nibh scelerisque augue, vel bibendum mi lacus suscipit magna. Vivamus id erat augue. Morbi eu velit sed neque consequat auctor vitae et ex. Donec sollicitudin congue felis, id mattis arcu vulputate ut. Vestibulum eleifend vel eros vel interdum. Morbi lacus ante, condimentum eget justo sed, malesuada bibendum felis. Donec vitae varius enim, pellentesque vehicula dolor. Suspendisse bibendum dictum neque, ac sagittis orci posuere eu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+Lorem,. ipsum, doldictum, lorem. Pellentesque congue tincidunt ipsum vel rhoncus. Vivamus vestibulum, augue non pharetra tristique, nisi nibh scelerisque augue, vel bibendum mi lacus suscipit magna. Vivamus id erat augue. Morbi eu velit sed neque consequat auctor vitae et ex. Donec sollicitudin congue felis, id mattis arcu vulputate ut. Vestibulum eleifend vel eros vel interdum. Morbi lacus ante, condimentum eget justo sed, malesuada bibendum felis. Donec vitae varius enim, pellentesque vehicula dolor. Suspendisse bibendum dictum neque, ac sagittis orci posuere eu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
 """
     time.sleep(5)
-    Typeinator().timeToType(exampleParagraph, 1)
+    Typeinator().timeToType(exampleParagraph, 3)
