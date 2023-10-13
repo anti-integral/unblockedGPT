@@ -1,6 +1,14 @@
 # UnblockedGPT
 A simple Streamlit chatbot that can be installed via pip.
 
+# How to Run
+```
+pip install demogpt
+```
+```
+chat
+```
+
 # Commands
 Chat Command:
 - Starts a web app that is an interface for the chatbot. Go to the url that is printed in the terminal to access the web app. 
