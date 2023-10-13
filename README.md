@@ -3,7 +3,7 @@ A simple Streamlit chatbot that can be installed via pip.
 
 # How to Run
 ```
-pip install demogpt
+pip install unblockedGPT
 ```
 ```
 chat
