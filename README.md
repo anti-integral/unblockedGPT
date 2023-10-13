@@ -25,10 +25,10 @@ typeGPT Command:
 
 # API Keys
 Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but I recommend getting the free and necessary ones = OpenAI, ProWritingAid, GPTHero (Username, Password).
-OpenAI: [https://platform.openai.com/account/api-keys](url)
-ProWritingAid: CC17F59E-1F6F-43EF-ACF4-A2B4B8E52401
-Username: sign up at gpthero.fly.dev and paste in username (be sure to paste in openai API key and prowritingaid api key (above) on login page)
-Password: sign up at gpthero.fly.dev and paste in password (be sure to paste in openai API key and prowritingaid api key (above) on login page)
-StealthGPT API Key: [get from [https://www.stealthgpt.ai/](url) (requires paid subscription)](https://www.stealthgpt.ai/)
-GPTZero: https://app.gptzero.me/app/api-subscription
-Originality: https://app.originality.ai/api-access
+- OpenAI: [https://platform.openai.com/account/api-keys](url)
+- ProWritingAid: CC17F59E-1F6F-43EF-ACF4-A2B4B8E52401
+- Username: sign up at gpthero.fly.dev and paste in username (be sure to paste in openai API key and prowritingaid api key (above) on login page)
+- Password: sign up at gpthero.fly.dev and paste in password (be sure to paste in openai API key and prowritingaid api key (above) on login page)
+- StealthGPT API Key: [get from [https://www.stealthgpt.ai/](url) (requires paid subscription)](https://www.stealthgpt.ai/)
+- GPTZero: https://app.gptzero.me/app/api-subscription
+- Originality: https://app.originality.ai/api-access
