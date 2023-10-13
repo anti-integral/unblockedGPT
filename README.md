@@ -8,6 +8,7 @@ pip install demogpt
 ```
 chat
 ```
+Then enter API keys (only OpenAI API key is required, but others are recommended) button and press save keys button. No need to enter api keys again - they will be saved on your system. 
 
 # Commands
 Chat Command:
