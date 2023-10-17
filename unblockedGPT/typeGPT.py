@@ -12,7 +12,6 @@ def typeGPT() -> None:
     auth = Database.get_instance()
     while True:
         #print selected model
-        print("")
         model_selection = input("Selected model (1)gpt3.5 or (2)gpt.4\nEnter 1 or 2:")
         if model_selection != "1" and model_selection != "2":
             print("Invalid selection")

@@ -24,12 +24,11 @@ class Typeinator():
             input: text to be typed, and minutes to type
             output: None
         """
-
-        #split text into 10 chunks at the end of a sentance
+        timeIn = timeIn * 60
+        #split text into chunks at the end of a sentance
         textGroups = re.findall(r'(.+?[.!?])(?:\s+|$)', text)
-        #join the chunks into 10 chunks
+        #join the chunks into chunks 2-6 sentances long
         toType = []
-        breaks = True
         while textGroups != []:
             rand = random.randint(2, 6)
             if len(textGroups) < rand:
@@ -37,10 +36,8 @@ class Typeinator():
             hold = textGroups[0:rand]
             #remove the chunks that are to be joined
             textGroups = textGroups[rand:]
-            #join 0 to rand chunks together
+            #join the chunks and add them to the toType list
             toType.append(' '.join(hold))
-        timeIn = timeIn * 60
-        #calculate the theorectical max time it would take to type the text
         
 
         for subtext in toType:
@@ -48,7 +45,7 @@ class Typeinator():
                 maxTime = len(subtext) * self.delay
                 punctuationPauses = 0
                 shortPunctuationPauses = 0
-
+                #calculate the theorectical max time it would take to type the text
                 #count the number of punctuation pauses
                 for i in subtext:
                     if i == '.' or i == '!' or i == '?':
@@ -160,15 +157,19 @@ class Typeinator():
             'pause': {'val':False, 'char':'/P/', 'pause': 5},
             'colon': {'val':False, 'char':':', 'pause': 6},
             'custom': {'val':False, 'char':',', 'pause': 7},
+            'none': {'val':False, 'char':'', 'pause': 8},
         }
         pauseRef = [0]
+        #random chance to not pause 25% of the time
+        if random.random() < 0.25:
+            pauseRef = [8]
         customPauses = []
-        # 60% chance to pause for 2.5 seconds after a comma
-        if ',' in text :
+        # 35% chance to pause for 2.5 seconds after a comma
+        if ',' in text and random.random() < 0.35:
             punctuation['comma']['val'] = True
             punctuationFlag = True
         # 60% chance to pause for 2.5 seconds after a semicolon
-        if ';' in text:
+        if ';' in text and random.random() < 0.6:
             punctuation['simicolon']['val'] = True
             punctuationFlag = True
         # Pause for 2.5 seconds after every period, exclamation mark, or question mark
@@ -244,11 +245,11 @@ class Typeinator():
                 pyautogui.typewrite(' '.join(words[:index]), interval=self.delay)
                 pyautogui.typewrite(' '+words[index]+' ', interval=self.delay)
                 #pause
-                time.sleep(self.getPauseTime(1))
+                time.sleep(self.getPauseTime(9))
                 pyautogui.typewrite(' '.join(words[index + 1:]), interval=self.delay)
             else:
                 pyautogui.typewrite(text, interval=self.delay)
-                time.sleep(self.getPauseTime(1))
+                time.sleep(self.getPauseTime(9))
         #time.sleep(self.punctuationPause)
     def getPauseTime(self, key:int = 0)-> float:
         """
@@ -256,14 +257,17 @@ class Typeinator():
             input: key
             output: pause time in seconds
         """
+        if key == 8:
+            return 0
         pauseTime = {
-            0: [3.5,5],
-            1: [2.5,3.5],
+            0: [10,15],
+            1: [7.5,10],
             2: [2.5,3.5],
             3: [3.5,5],
             4: [3.5,5],
             5: [3.5,5],
             6: [2.5,3.5],
+            9: [2.5,3.5]
         }
         #create random float between puasetime['key'][0 and 1] and return it as a float with 2 decimal places
         return round(random.uniform(pauseTime[key][0], pauseTime[key][1]), 2)

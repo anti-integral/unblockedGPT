@@ -6,9 +6,10 @@ import time
 import sys
 from unblockedGPT.typeGPT import typeGPT
 def run():
+    cur_dir = os.getcwd()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     app_path = os.path.join(dir_path, 'app.py')
-    os.system(f'streamlit run {app_path}')
+    os.system(f'streamlit run {app_path} -- "{cur_dir}"')
     
 def textToType(args = sys.argv):
     if "-h" in args or "--help" in args:
