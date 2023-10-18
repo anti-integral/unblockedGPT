@@ -13,7 +13,7 @@ python get-pip.py
 ```
 
 # How to Run
-In terminal or command prompt (cmd):
+In terminal or command prompt (cmd):  
 ```
 pip install unblockedGPT
 ```
