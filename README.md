@@ -1,9 +1,9 @@
 # UnblockedGPT
 A simple Streamlit chatbot that can be installed via pip.
 
-# How to Run
-Ensure Python is Installed on Your Device: [https://www.python.org/downloads/](url)
-Ensure Pip is Installed on Your Device:
+# Installations
+- Ensure Python is Installed on Your Device: [https://www.python.org/downloads/](url)
+- Ensure Pip is Installed on Your Device:
 To install pip, open terminal or command prompt (cmd) and enter these commands:
 ```
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -12,8 +12,7 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 ```
 
-
-
+# How to Run
 ```
 pip install unblockedGPT
 ```
