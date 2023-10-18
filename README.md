@@ -38,6 +38,7 @@ typeGPT Command:
 # API Keys
 Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but I recommend getting the free and necessary ones = OpenAI, ProWritingAid, GPTHero (Username, Password). Other free ones are set by default.
 - OpenAI: [https://platform.openai.com/account/api-keys](url)
+- GPTHero API Key: Set automatically.
 - StealthGPT API Key: get from [https://www.stealthgpt.ai/](url) (requires paid subscription)
 - GPTZero: https://app.gptzero.me/app/api-subscription
 - Originality: https://app.originality.ai/api-access
