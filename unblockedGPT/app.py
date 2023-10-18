@@ -7,8 +7,7 @@ from unblockedGPT.detection import ai_detection, ai_detection_2
 from unblockedGPT.typeresponse import Typeinator
 from unblockedGPT.saveResponse import saveResponse
 from unblockedGPT.projectDataTypes import Conversation, FullConversation, AIScore
-from unblockedGPT.GPTHeroAuth import gptHeroAuthLogin, gptHeroSetTokes, gptHeroAuthSignUp
-from streamlit_modal import Modal
+from unblockedGPT.GPTHeroAuth import gptHeroAuth
 import time
 import sys
 
@@ -32,7 +31,7 @@ savePath = sys.argv[1]
 #stealthgpt_api_key = st.text_input("Rephrasing Key", type="password")
 #gptzero_api_key = st.text_input("Detection Key", type="password")
 #orginality = st.text_input("Originality Key", type="password")
-keys = [st.text_input(auth.key_lable(i), type="password") for i in auth.index if i != 2 and i != 3]
+keys = [st.text_input(auth.key_lable(i), type="password") for i in auth.index if i != 2 and i != 3 and i != 1 and i !=7]
 if st.button('Save Keys'):
     for i in range(len(keys)):
         if i != 2 and i != 3:
@@ -41,7 +40,11 @@ if st.button('Save Keys'):
                 keys[i] = ''
     st.write("Keys Saved")
         
-
+if st.button('GPT Hero'):
+    if gptHeroAuth():
+        st.write("Authenticated")
+    else:
+        st.write("Error authenticating with GPT Hero. Please check that you have openAI key saved!")
 # Check if user entered the special password for any key
 #if openai_api_key == SPECIAL_PASSWORD:
 openai_api_key = OPENAI_API_KEY_DEFAULT
@@ -50,110 +53,12 @@ stealthgpt_api_key = STEALTHGPT_API_KEY_DEFAULT
 #if gptzero_api_key == SPECIAL_PASSWORD:
 gptzero_api_key = GPTZERO_API_KEY_DEFAULT
 
-if 'modal' not in st.session_state:
-    st.session_state.modal = 0
-# Initialize session_state if not already initialized
-if 'position' not in st.session_state:
-    st.session_state.position = -1  # Position of the current display in history
 
-if 'rephrase_list' not in st.session_state:
-    st.session_state.rephrase_list = []
-    st.session_state.submitFlag = True
+if 'submitFlag' not in st.session_state:
+    st.session_state.submitFlag = False
 # Title
 st.title('Totally Not ChatGPT')
-modal = Modal("", "testmodal")
-open_modal = st.button("Sign-Up/Log-In to GPTHero")
-if open_modal:
-    modal.open()
 
-if modal.is_open():
-    with modal.container():
-        #write the is a modal in blue text
-        st.write(f'<div style="color: blue;font-size: 30px;">Sign-Up for GPTHero</div>', unsafe_allow_html=True)
-        if openai_api_key == False:
-            st.write(f'<div style="color: blue;"><h2>OpenAI API Key</h2></div>', unsafe_allow_html=True)
-            openai_api_key = st.text_input("OpenAI Api Key", type="password")
-            submit = st.button("Submit")
-            if submit:
-                auth.set_settings(0, openai_api_key)
-        else:
-            col1, col2 = st.columns(2)
-            with col1:
-                loginButton = st.button("Login")
-            with col2:
-                signupButton = st.button("Sign-Up")
-            if signupButton:
-                st.session_state.modal = 2
-            if loginButton:
-                st.session_state.modal = 1
-            if st.session_state.modal == 1:
-                st.write(f'<div style="color: blue;font-size: 20px;">Login for GPTHero</div>', unsafe_allow_html=True)
-                st.write("<div style='color: blue;'>Username</div>", unsafe_allow_html=True)
-                username = st.text_input("", key="logusername")
-                st.write("<div style='color: blue;'>Password</div>", unsafe_allow_html=True)
-                password = st.text_input("", type="password", key= "logpassword")
-                submitButton = st.button("Submit", key = "submitLogin")
-                
-                if submitButton:
-                    login = gptHeroAuthLogin(username, password)
-                    if login:
-                        try:
-                            auth.set_settings(2, username)
-                            auth.set_settings(3, password)
-                            #set the api keys
-                            openai_api_key = auth.get_settings(0)
-                            powerwritingaid_api_key = auth.get_settings(1)
-                            if not powerwritingaid_api_key:
-                                powerwritingaid_api_key = DEFAULT_PW_KEY
-                            if gptHeroSetTokes(login, openai_api_key, powerwritingaid_api_key):
-                                st.write("<div style='color: green;'>Logged in</div>", unsafe_allow_html=True)
-                            else:
-                                st.write("<div style='color: red;'>Error setting keys</div>", unsafe_allow_html=True)
-                        except:
-                            st.write("<div style='color: red;'>Error setting keys</div>", unsafe_allow_html=True)
-
-                    else:
-                        st.write("<div style='color: red;'>Invalid Username or Password</div>", unsafe_allow_html=True)
-
-            
-            if st.session_state.modal == 2:
-                st.write(f'<div style="color: blue;font-size: 20px;">Sign-Up</div>', unsafe_allow_html=True)
-                st.write("<div style='color: blue;'>Username</div>", unsafe_allow_html=True)
-                username = st.text_input("", key = "username")
-                st.write("<div style='color: blue;'>Password</div>", unsafe_allow_html=True)
-                password = st.text_input("", type="password", key = "password")
-                submitButton = st.button("Submit", key = "submitSignup")
-                if submitButton:
-                    if gptHeroAuthSignUp(username, password):
-                        time.sleep(0.5)
-                        login = gptHeroAuthLogin(username, password)
-                        if login:
-                            try:
-                                auth.set_settings(2, username)
-                                auth.set_settings(3, password)
-                                openai_api_key = auth.get_settings(0)
-                                powerwritingaid_api_key = auth.get_settings(1)
-                                if not powerwritingaid_api_key:
-                                    powerwritingaid_api_key = DEFAULT_PW_KEY
-                                if gptHeroSetTokes(login, openai_api_key, powerwritingaid_api_key):
-                                    st.write("<div style='color: green;'>Signed up and logged in</div>", unsafe_allow_html=True)
-                                else:
-                                    st.write("<div style='color: red;'>Error setting keys</div>", unsafe_allow_html=True)
-
-                            except:
-                                st.write("<div style='color: red;'>Error setting keys</div>", unsafe_allow_html=True)
-                        else:
-                            st.write("<div style='color: red;'>Error logging in</div>", unsafe_allow_html=True)
-                    else:
-                        st.write("<div style='color: red;'>Error signing up</div>", unsafe_allow_html=True)
-
-                    
-
-            
-        close_modal = st.button("Close")
-        if close_modal:
-            st.session_state.modal = 0
-            modal.close()
 # Model selection
 model_selection = st.selectbox('Select the model:', ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-4'])
 
@@ -185,10 +90,23 @@ if user_input and st.session_state.submitFlag:
     else:
         st.write("Please enter an API Key")
         
-
-        
 # Rephrase button
 if st.button('Rephrase Text'):
+    flag = True
+    if auth.get_settings(7) == False:
+        if not gptHeroAuth():
+            st.write("Error authenticating with GPT Hero, make sure you have openAI key saved!")
+            flag = False
+    if flag:
+        response =  rephrase_2(st.session_state.conversation.getConversation()[0].response)
+        if response['status']:
+            aiscore = AIScore(ai_detection( response['msg'], auth), ai_detection_2( response['msg'], auth))
+        else:
+            aiscore = AIScore("N/A", "N/A")
+        st.session_state.conversation.addResponse('Rephrase Text 2', response['msg'], 0, aiscore)
+        
+# Rephrase button 2
+if st.button('Rephrase Text 2'):
     if stealthgpt_api_key != False:
         headers = {'api-token': stealthgpt_api_key, 'Content-Type': 'application/json'}
         data = {'prompt': st.session_state.conversation.getConversation()[0].response, 'rephrase': True}
@@ -204,14 +122,7 @@ if st.button('Rephrase Text'):
     else:
         st.write("Please enter stealth API Key")
 
-# Rephrase button 2
-if st.button('Rephrase Text 2'):
-    response =  rephrase_2(st.session_state.conversation.getConversation()[0].response)
-    if response['status']:
-        aiscore = AIScore(ai_detection( response['msg'], auth), ai_detection_2( response['msg'], auth))
-    else:
-        aiscore = AIScore("N/A", "N/A")
-    st.session_state.conversation.addResponse('Rephrase Text 2', response['msg'], 0, aiscore)
+
 
 
 
@@ -249,5 +160,3 @@ for turn in conversation:
                 st.write("Saved")
             else:
                 st.write("Error saving")
-    
-

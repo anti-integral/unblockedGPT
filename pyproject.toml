@@ -11,8 +11,7 @@ dependencies = [
     'urllib3==1.26.15',
     'requests',
     'openai',
-    'streamlit',
-    'streamlit-modal'
+    'streamlit'
 ]
 [project.scripts]
 chat = "unblockedGPT.__main__:run"

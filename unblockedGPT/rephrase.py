@@ -13,7 +13,7 @@ def rephrase_2(essay: str) -> dict:
 
     # Define the request payload
     auth = Database.get_instance()
-    hero = gptHeroAuthLogin(auth.get_settings(2), auth.get_settings(3))
+    hero = auth.get_settings(7)
     if hero == False:
         return {'status':False, 'msg':"Sign in to GPT Hero"}
     request_payload = {
@@ -33,7 +33,10 @@ def rephrase_2(essay: str) -> dict:
     }
 
     # Send a POST request to the /rephrase_essay endpoint
-    response = requests.post(f"{base_url}/rephrase_essay", json=request_payload)
+    try:
+        response = requests.post(f"{base_url}/rephrase_essay", json=request_payload)
+    except:
+        return {'status':False, 'msg':"Error connecting to GPT Hero, Use VPN and Retry"}
 
     # Check the response status code
     if response.status_code == 200:

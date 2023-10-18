@@ -26,11 +26,13 @@ class Database:
                 3:'password',
                 4:'stealthgpt_api_key',
                 5:'gptzero_api_key',
-                6:'originality'
+                6:'originality',
+                7:'gpt_hero_api_key',
             }
             self.db = sqlite3.connect('database.db',check_same_thread=False)
             self.cursor = self.db.cursor()
             self.create_tables()
+
     def create_tables(self):
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS user_settings(
@@ -40,6 +42,21 @@ class Database:
             )
         ''')
         self.db.commit()
+        self.cursor.execute('''
+            SELECT * FROM user_settings WHERE key = 1
+        ''')
+        if len(self.cursor.fetchall()) == 0:
+            self.cursor.execute('''
+                INSERT INTO user_settings(
+                    key,
+                    value
+                ) VALUES(?,?)
+            ''', (
+                1,
+                'CC17F59E-1F6F-43EF-ACF4-A2B4B8E52401'
+            ))
+            self.db.commit()
+        
     def get_settings(self, key: int) -> Union[str, bool]:
         """
             returns auth credintials matching the key value provided or False if no key is found
