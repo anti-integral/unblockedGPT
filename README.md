@@ -36,7 +36,7 @@ typeGPT Command:
 - Command to type a prompt into the GPT model and write the output to keyboard inputs.
 
 # API Keys
-Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but I recommend getting the free and necessary ones = OpenAI, ProWritingAid, GPTHero (Username, Password). Other free ones are set by default.
+Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but OpenAI API key is required. Other ones are set by default or need your input. Copy and paste these links into browser.
 - OpenAI: [https://platform.openai.com/account/api-keys](url)
 - GPTHero API Key: Set automatically (no manual changes needed).
 - StealthGPT API Key: get from [https://www.stealthgpt.ai/](url) (requires paid subscription)
