@@ -2,7 +2,7 @@
 A simple Streamlit chatbot that can be installed via pip.
 
 # Installations
-Ensure Python is Installed on Your Device: [https://www.python.org/downloads/](url) /n
+Ensure Python is Installed on Your Device: [https://www.python.org/downloads/](url)  
 Ensure Pip is Installed on Your Device:
 To install pip, open terminal or command prompt (cmd) and enter these commands:
 ```
