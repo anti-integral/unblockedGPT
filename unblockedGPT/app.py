@@ -110,15 +110,19 @@ if st.button('Rephrase Text 2'):
     if stealthgpt_api_key != False:
         headers = {'api-token': stealthgpt_api_key, 'Content-Type': 'application/json'}
         data = {'prompt': st.session_state.conversation.getConversation()[0].response, 'rephrase': True}
-        response = requests.post('https://stealthgpt.ai/api/stealthify', headers=headers, json=data)
-        if response.status_code == 200:
-            rephrased_text = response.json()
-            rephrased_text = rephrased_text['result']
-            st.session_state.conversation.addResponse('Rephrase Text', rephrased_text, 0, AIScore(ai_detection( rephrased_text, auth), ai_detection_2( rephrased_text, auth)))
-        elif response.status_code == 401:
-            st.session_state.conversation.addResponse('Rephrase Text 1', 'Invalid API Key', 0, AIScore("N/A", "N/A"))
-        else:
-            st.session_state.conversation.addResponse('Rephrase Text 1', 'Could not rephrase', 0, AIScore("N/A", "N/A"))
+        try:
+            response = requests.post('https://stealthgpt.ai/api/stealthify', headers=headers, json=data)
+            
+            if response.status_code == 200:
+                rephrased_text = response.json()
+                rephrased_text = rephrased_text['result']
+                st.session_state.conversation.addResponse('Rephrase Text', rephrased_text, 0, AIScore(ai_detection( rephrased_text, auth), ai_detection_2( rephrased_text, auth)))
+            elif response.status_code == 401:
+                st.session_state.conversation.addResponse('Rephrase Text 1', 'Invalid API Key', 0, AIScore("N/A", "N/A"))
+            else:
+                st.session_state.conversation.addResponse('Rephrase Text 1', 'Could not rephrase', 0, AIScore("N/A", "N/A"))
+        except:
+            st.write("Error connecting to StealthGPT, Use VPN and Retry")
     else:
         st.write("Please enter stealth API Key")
 
