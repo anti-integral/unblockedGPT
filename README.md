@@ -1,7 +1,19 @@
 # UnblockedGPT
 A simple Streamlit chatbot that can be installed via pip.
 
+# Installations
+1. Ensure Python is Installed on Your Device: [https://www.python.org/downloads/](url)  
+2. Ensure Pip is Installed on Your Device:  
+To install pip, open terminal or command prompt (cmd) and enter these commands:
+```
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+```
+```
+python get-pip.py
+```
+
 # How to Run
+In terminal or command prompt (cmd):  
 ```
 pip install unblockedGPT
 ```
@@ -24,11 +36,9 @@ typeGPT Command:
 - Command to type a prompt into the GPT model and write the output to keyboard inputs.
 
 # API Keys
-Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but I recommend getting the free and necessary ones = OpenAI, ProWritingAid, GPTHero (Username, Password).
+Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but OpenAI API key is required. Other ones are set by default or need your input. Copy and paste these links into browser.
 - OpenAI: [https://platform.openai.com/account/api-keys](url)
-- ProWritingAid: CC17F59E-1F6F-43EF-ACF4-A2B4B8E52401
-- Username: sign up at [gpthero.fly.dev](url) and paste in username (be sure to paste in openai API key and prowritingaid api key (above) on login page)
-- Password: sign up at [gpthero.fly.dev](url) and paste in password (be sure to paste in openai API key and prowritingaid api key (above) on login page)
+- GPTHero API Key: Set automatically (no manual changes needed).
 - StealthGPT API Key: get from [https://www.stealthgpt.ai/](url) (requires paid subscription)
 - GPTZero: https://app.gptzero.me/app/api-subscription
 - Originality: https://app.originality.ai/api-access
