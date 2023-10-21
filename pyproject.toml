@@ -18,5 +18,5 @@ chat = "unblockedGPT.__main__:run"
 typetext = "unblockedGPT.__main__:textToType"
 typeGPT = "unblockedGPT.__main__:typeGPTCmd"
 saveHero = "unblockedGPT.__main__:heroTypeCmd"
-stealthtype = "unblockedGPT.__main__:stealthTypeCmd"
+saveStealth = "unblockedGPT.__main__:stealthTypeCmd"
 
