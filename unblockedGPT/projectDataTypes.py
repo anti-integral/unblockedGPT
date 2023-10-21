@@ -67,3 +67,11 @@ class AuthValue():
         self.key = key
         self.value = value
         self.label = lable
+
+class PageOptions():
+    def __init__(self) -> None:
+        """
+            represents the page state
+        """
+        self.openaiSet = False
+        self.stealthgptSet = False

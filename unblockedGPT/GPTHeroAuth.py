@@ -74,8 +74,8 @@ def gptHeroAuthLogin(username:str, password:str) -> Union[str, bool]:
     }
     r = requests.post(url + 'login', json=payload)
     if r.status_code == 200:
-        auth.set_settings(2, username)
-        auth.set_settings(3, password)
+        auth.set_settings(5, username)
+        auth.set_settings(6, password)
         return r.json()['token']
     return False
 
