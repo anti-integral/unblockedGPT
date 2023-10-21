@@ -6,7 +6,7 @@ def ai_detection(chatbot_response: str, auth: Database) -> str:
     """
         This function detects the AI generated text using the GPTZero API.
     """
-    gptzero_api_key = auth.get_settings(5)
+    gptzero_api_key = auth.get_settings(1)
     if gptzero_api_key == False:
         return "Please enter GPTZero API Key"
     gptzero_response = requests.post(
@@ -28,7 +28,7 @@ def ai_detection_2(chatbot_response: str, auth: Database) -> str:
     """
         This function detects the AI generated text using the Originality API.
     """
-    api_key = auth.get_settings(6)
+    api_key = auth.get_settings(2)
     if api_key == False:
         return "Please enter originality API Key"
     url = "https://api.originality.ai/api/v1/scan/ai"

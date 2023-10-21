@@ -5,15 +5,38 @@ import openai
 import time
 import sys
 from unblockedGPT.typeGPT import typeGPT
+from unblockedGPT.saveResponse import heroSave, stealthSave
 def run():
     cur_dir = os.getcwd()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     app_path = os.path.join(dir_path, 'app.py')
     os.system(f'streamlit run {app_path} -- "{cur_dir}"')
-    
+
+def stealthTypeCmd(args = sys.argv):
+    if '-h' in args or '--help' in args:
+        print("Usage: stealthtype -p [path to text file/file in curent dir] ")
+        return
+    if "-p" in args:
+        stealthSave(args[args.index("-p") + 1], os.getcwd())
+    else:
+        print("No file path provided. Use -h for help")
+        return
+
+
+def heroTypeCmd(args = sys.argv):
+    if "-h" in args or "--help" in args:
+        print("Usage: herotype -p [path to text file/file in curent dir]")
+        return
+    if "-p" in args:
+        path = args[args.index("-p") + 1]
+        heroSave( path,os.getcwd())
+    else:
+        print("No file path provided. Use -h for help")
+        return
+
 def textToType(args = sys.argv):
     if "-h" in args or "--help" in args:
-        print("Usage: typetext -p [path to text file/file in curent dir] (optional) -t [time in minutes] (optional)")
+        print("Usage: typetext -p [path to text file/file in curent dir] -t [time in minutes] (optional)")
         return
     if "-p" in args:
         path = args[args.index("-p") + 1]

@@ -14,19 +14,16 @@ def gptHeroAuth() -> bool:
     output: true if authenticated, false if not
     """
     if auth.get_settings(7) != False:
-        token = gptHeroAuthLogin(auth.get_settings(2), auth.get_settings(3))
+        token = gptHeroAuthLogin(auth.get_settings(5), auth.get_settings(6))
         if token:
             auth.set_settings(7, token)
-            return gptHeroSetTokes(token, auth.get_settings(0), auth.get_settings(1))
+            return gptHeroSetTokes(token, auth.get_settings(0), auth.get_settings(4))
 
     token = gptHeroAuthSignUp()
     if token:
         auth.set_settings(7, token)
-        return gptHeroSetTokes(token, auth.get_settings(0), auth.get_settings(1))
+        return gptHeroSetTokes(token, auth.get_settings(0), auth.get_settings(4))
     return False
-    
-
-
 
 def gptHeroAuthSignUp() -> Union[str, bool]:
     """
@@ -40,7 +37,7 @@ def gptHeroAuthSignUp() -> Union[str, bool]:
     flag = True
     
     while flag:
-        username = "unblockedGPT"+ str(random.randint(0, 20))
+        username = "unblockedGPT"+ str(random.randint(0, 100000))
         random_password = ''.join(random.choice(string.ascii_letters) for i in range(20))
 
         payload = {

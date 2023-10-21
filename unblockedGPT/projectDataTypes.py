@@ -1,3 +1,6 @@
+import streamlit as st
+
+
 class AIScore:
     def __init__(self, score:str, score2:str) -> None:
         self.score = score
@@ -53,5 +56,14 @@ class FullConversation:
         elif option == 2:
             return self.ai_detection_score.score2
         return self.ai_detection_score
-    
 
+class AuthValue():
+    def __init__(self,  value:str,key:int, lable:str = "") -> None:
+        """
+            class that represents a single auth value
+            input: key, value
+            output: None
+        """
+        self.key = key
+        self.value = value
+        self.label = lable

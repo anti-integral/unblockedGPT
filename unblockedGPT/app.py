@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import openai
-from unblockedGPT.rephrase import rephrase_2
+from unblockedGPT.rephrase import rephrase_2, rephrase_1
 from unblockedGPT.auth import Database
 from unblockedGPT.detection import ai_detection, ai_detection_2
 from unblockedGPT.typeresponse import Typeinator
@@ -11,47 +11,31 @@ from unblockedGPT.GPTHeroAuth import gptHeroAuth
 import time
 import sys
 
-
 # Decrypted API keys
 auth = Database.get_instance()
-OPENAI_API_KEY_DEFAULT = auth.get_settings(0)
-STEALTHGPT_API_KEY_DEFAULT = auth.get_settings(4)
-GPTZERO_API_KEY_DEFAULT = auth.get_settings(5)
-
-# Placeholder for special password
-SPECIAL_PASSWORD = 'klfasdjf94305$'
-DEFAULT_PW_KEY = "CC17F59E-1F6F-43EF-ACF4-A2B4B8E52401"
+openai_api_key = auth.get_settings(0)
+stealthgpt_api_key = auth.get_settings(3)
+gptzero_api_key = auth.get_settings(1)
 
 #get args from command line
-
 savePath = sys.argv[1]
+#check if auth input already exists
+opneai = st.text_input('OpenAI API Key')
+gptzero = st.text_input('StealthGPT API Key (unnecessary)')
+originality = st.text_input('Originality API Key (not necessary but can be helpful)')
+stealthgpt = st.text_input('StealthGPT API Key (unnecessary)', key="stealthinput")
 
-# Obtain API keys from the user (or use the defaults)
-#openai_api_key = st.text_input("OpenAI Api Key", type="password")
-#stealthgpt_api_key = st.text_input("Rephrasing Key", type="password")
-#gptzero_api_key = st.text_input("Detection Key", type="password")
-#orginality = st.text_input("Originality Key", type="password")
-keys = [st.text_input(auth.key_lable(i), type="password") for i in auth.index if i != 2 and i != 3 and i != 1 and i !=7]
 if st.button('Save Keys'):
-    for i in range(len(keys)):
-        if i != 2 and i != 3:
-            if keys[i] != '' and keys[i] != None:
-                auth.set_settings(i, keys[i])
-                keys[i] = ''
-    st.write("Keys Saved")
-        
-if st.button('GPT Hero'):
-    if gptHeroAuth():
-        st.write("Authenticated")
-    else:
-        st.write("Error authenticating with GPT Hero. Please check that you have openAI key saved!")
-# Check if user entered the special password for any key
-#if openai_api_key == SPECIAL_PASSWORD:
-openai_api_key = OPENAI_API_KEY_DEFAULT
-#if stealthgpt_api_key == SPECIAL_PASSWORD:
-stealthgpt_api_key = STEALTHGPT_API_KEY_DEFAULT
-#if gptzero_api_key == SPECIAL_PASSWORD:
-gptzero_api_key = GPTZERO_API_KEY_DEFAULT
+    if opneai:
+        auth.set_settings(0, opneai)
+        gptHeroAuth()
+    if gptzero:
+        auth.set_settings(1, gptzero)
+    if originality:
+        auth.set_settings(2, originality)
+    if stealthgpt:
+        auth.set_settings(3, stealthgpt)
+    st.write("Saved")
 
 
 if 'submitFlag' not in st.session_state:
@@ -108,27 +92,14 @@ if st.button('Rephrase Text'):
 # Rephrase button 2
 if st.button('Rephrase Text 2'):
     if stealthgpt_api_key != False:
-        headers = {'api-token': stealthgpt_api_key, 'Content-Type': 'application/json'}
-        data = {'prompt': st.session_state.conversation.getConversation()[0].response, 'rephrase': True}
-        try:
-            response = requests.post('https://stealthgpt.ai/api/stealthify', headers=headers, json=data)
-            
-            if response.status_code == 200:
-                rephrased_text = response.json()
-                rephrased_text = rephrased_text['result']
-                st.session_state.conversation.addResponse('Rephrase Text', rephrased_text, 0, AIScore(ai_detection( rephrased_text, auth), ai_detection_2( rephrased_text, auth)))
-            elif response.status_code == 401:
-                st.session_state.conversation.addResponse('Rephrase Text 1', 'Invalid API Key', 0, AIScore("N/A", "N/A"))
-            else:
-                st.session_state.conversation.addResponse('Rephrase Text 1', 'Could not rephrase', 0, AIScore("N/A", "N/A"))
-        except:
-            st.write("Error connecting to StealthGPT, Use VPN and Retry")
+        respones = rephrase_1(st.session_state.conversation.getConversation()[0].response)
+        if response['status']:
+            aiscore = AIScore(ai_detection( response['msg'], auth), ai_detection_2( response['msg'], auth))
+        else:
+            aiscore = AIScore("N/A", "N/A")
+        st.session_state.conversation.addResponse('Rephrase Text 2', response['msg'], 0, aiscore)
     else:
         st.write("Please enter stealth API Key")
-
-
-
-
 
 # Type response
 if st.button('Type Response'):
@@ -146,7 +117,6 @@ if st.button('Timed Type Response') and minutes != 0:
     typeinator = Typeinator()
     typeinator.timeToType(st.session_state.conversation.getConversation()[0].response, minutes)
     minutes = 0
-
 
 # Display conversation and rephrases
 st.write(f'<div style="text-align: right; color: blue;">AI Detection Score: {st.session_state.conversation.getScore(1)}</div>', unsafe_allow_html=True )
