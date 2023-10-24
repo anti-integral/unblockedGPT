@@ -19,4 +19,5 @@ typetext = "unblockedGPT.__main__:textToType"
 typeGPT = "unblockedGPT.__main__:typeGPTCmd"
 saveHero = "unblockedGPT.__main__:heroTypeCmd"
 saveStealth = "unblockedGPT.__main__:stealthTypeCmd"
+setKeys = "unblockedGPT.__main__:setKeys"
 

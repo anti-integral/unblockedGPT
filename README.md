@@ -35,6 +35,9 @@ typetext Command:
 typeGPT Command:
 - Command to type a prompt into the GPT model and write the output to keyboard inputs.
 
+setKeys Command:
+- Command to set api keys for the chatbot.
+- Run the command `setKeys` and follow the instructions in the terminal.
 # API Keys
 Note none of these can be taken from you because this runs locally on your computer. Some require subscriptions but OpenAI API key is required. Other ones are set by default or need your input. Copy and paste these links into browser.
 - OpenAI: [https://platform.openai.com/account/api-keys](url)

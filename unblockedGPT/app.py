@@ -22,7 +22,7 @@ gptzero_api_key = auth.get_settings(1)
 savePath = sys.argv[1]
 #check if auth input already exists
 opneai = st.text_input('OpenAI API Key')
-gptzero = st.text_input('StealthGPT API Key (unnecessary)')
+gptzero = st.text_input('gptZero API Key (unnecessary)')
 originality = st.text_input('Originality API Key (not necessary but can be helpful)')
 stealthgpt = st.text_input('StealthGPT API Key (unnecessary)', key="stealthinput")
 if st.button('Save Keys'):
