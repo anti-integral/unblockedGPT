@@ -38,7 +38,7 @@ def gptHeroAuthSignUp() -> Union[str, bool]:
     
     while flag:
         username = "unblockedGPT"+ str(random.randint(0, 100000))
-        random_password = ''.join(random.choice(string.ascii_letters) for i in range(20))
+        random_password = ''.join(random.choice(string.ascii_letters) for _ in range(20))
 
         payload = {
             "user": {
@@ -72,12 +72,16 @@ def gptHeroAuthLogin(username:str, password:str) -> Union[str, bool]:
             "password": password
         }
     }
-    r = requests.post(url + 'login', json=payload)
-    if r.status_code == 200:
-        auth.set_settings(5, username)
-        auth.set_settings(6, password)
-        return r.json()['token']
-    return False
+    try:
+        r = requests.post(url + 'login', json=payload)
+        if r.status_code == 200:
+            auth.set_settings(5, username)
+            auth.set_settings(6, password)
+            return r.json()['token']
+        return False
+    except Exception as e:
+        print(e)
+
 
 def gptHeroSetTokes(heroToken:str, gptToken:str, pwToken:str):
     if heroToken == False or gptToken == False or pwToken == False:

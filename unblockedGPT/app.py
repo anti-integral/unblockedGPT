@@ -21,14 +21,13 @@ gptzero_api_key = auth.get_settings(1)
 #get args from command line
 savePath = sys.argv[1]
 #check if auth input already exists
-opneai = st.text_input('OpenAI API Key')
-gptzero = st.text_input('gptZero API Key (unnecessary)')
-originality = st.text_input('Originality API Key (not necessary but can be helpful)')
-stealthgpt = st.text_input('StealthGPT API Key (unnecessary)', key="stealthinput")
+opneai = st.text_input('OpenAI API Key', type="password")
+gptzero = st.text_input('gptZero API Key (unnecessary)', type="password")
+originality = st.text_input('Originality API Key (not necessary but can be helpful)', type="password")
+stealthgpt = st.text_input('StealthGPT API Key (unnecessary)', key="stealthinput", type="password")
 if st.button('Save Keys'):
     if opneai:
         auth.set_settings(0, opneai)
-        gptHeroAuth()
     if gptzero:
         auth.set_settings(1, gptzero)
     if originality:
@@ -36,6 +35,9 @@ if st.button('Save Keys'):
     if stealthgpt:
         auth.set_settings(3, stealthgpt)
     st.write("Saved")
+
+if st.button("GPT Hero Auth"):
+    gptHeroAuth()
 
 if 'pageOptions' not in st.session_state:
     st.session_state.pageOptions = PageOptions()
@@ -89,9 +91,10 @@ if st.session_state.pageOptions.openaiSet:
     if st.button('Rephrase Text'):
         flag = True
         if auth.get_settings(7) == False:
-            if not gptHeroAuth():
-                st.write("Error authenticating with GPT Hero, make sure you have openAI key saved!")
-                flag = False
+            st.write("Please authenticate with GPT Hero")
+            #if not gptHeroAuth():
+            #    st.write("Error authenticating with GPT Hero, make sure you have openAI key saved!")
+            #    flag = False
         if flag:
             response =  rephrase_2(st.session_state.conversation.getConversation()[0].response)
             if response['status']:
