@@ -96,8 +96,6 @@ class Typeinator():
             if '/U/' in sentance:
                 pyautogui.hotkey(self.comandKey, 'u')
                 sentance = sentance.replace('/U/', '')
-            if '/DOTS/' in sentance:
-                sentance = sentance.replace('/DOTS/', '..')
             if '/T/' in sentance:
                 sentance = sentance.replace('/T/', '\t')
             
@@ -160,12 +158,12 @@ class Typeinator():
             'none': {'val':False, 'char':'', 'pause': 8},
         }
         pauseRef = [0]
-        #random chance to not pause 50% of the time
-        if random.random() < 0.5:
+        #random chance to not pause 25% of the time
+        if random.random() < 0.25:
             pauseRef = [8]
         customPauses = []
         # 35% chance to pause for 2.5 seconds after a comma
-        if ',' in text and random.random() < 0.35:
+        if ',' in text and random.random() < 0.65:
             punctuation['comma']['val'] = True
             punctuationFlag = True
         # 60% chance to pause for 2.5 seconds after a semicolon
