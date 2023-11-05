@@ -128,8 +128,8 @@ class Typeinator():
                     typo_part = word + random.choice(string.ascii_lowercase)
                     self.writer(typo_part)
 
-                    # 30% chance to recognize and fix the typo
-                    if random.random() < 0.30:
+                    # 90% chance to recognize and fix the typo
+                    if random.random() < 0.90:
                         time.sleep(self.punctuationPause)
                         # Delete the incorrect word
                         for _ in range(len(typo_part)):
@@ -160,8 +160,8 @@ class Typeinator():
             'none': {'val':False, 'char':'', 'pause': 8},
         }
         pauseRef = [0]
-        #random chance to not pause 25% of the time
-        if random.random() < 0.25:
+        #random chance to not pause 50% of the time
+        if random.random() < 0.5:
             pauseRef = [8]
         customPauses = []
         # 35% chance to pause for 2.5 seconds after a comma
