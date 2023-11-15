@@ -79,6 +79,8 @@ class Typeinator():
             input: text to be typed
             output: None
         """
+        if '.' not in text and '!' not in text and '?' not in text:
+            text += '.'
         if '...' in text:
             text = text.replace('...', './DOTS/')
         sentances = text.split('.')
@@ -195,7 +197,6 @@ class Typeinator():
 
             #split sentance on commas if punctuation['comma'] is true, and replace the commas
             for key in punctuation:
-
                 if punctuation[key]['val']:
                     for x in range(len(split)):
                         if punctuation[key]['char'] in split[x] or re.search(r'/(\d+)/', split[x]):
@@ -257,13 +258,14 @@ class Typeinator():
         """
         if key == 8:
             return 0
+        if key == 5:
+            return 10
         pauseTime = {
             0: [10,15],
             1: [7.5,10],
             2: [2.5,3.5],
             3: [3.5,5],
             4: [3.5,5],
-            5: [3.5,5],
             6: [2.5,3.5],
             9: [2.5,3.5]
         }
@@ -274,16 +276,7 @@ class Typeinator():
 if __name__ == '__main__':
 
     exampleParagraph = """
-more conent... and more content...
-beofre bullets/+/ first bul/P/let
-This is a bul/5/let point.
-another me.
-another
-/-/
-/T/after the bullets.
-
-
-Lorem,. ipsum, doldictum, lorem. Pellentesque congue tincidunt ipsum vel rhoncus. Vivamus vestibulum, augue non pharetra tristique, nisi nibh scelerisque augue, vel bibendum mi lacus suscipit magna. Vivamus id erat augue. Morbi eu velit sed neque consequat auctor vitae et ex. Donec sollicitudin congue felis, id mattis arcu vulputate ut. Vestibulum eleifend vel eros vel interdum. Morbi lacus ante, condimentum eget justo sed, malesuada bibendum felis. Donec vitae varius enim, pellentesque vehicula dolor. Suspendisse bibendum dictum neque, ac sagittis orci posuere eu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-"""
+Lorem ipsum /P/ dold/45/ictum /p/lorem.
+    """
     time.sleep(5)
     Typeinator().timeToType(exampleParagraph, 3)
