@@ -57,7 +57,7 @@ if st.session_state.pageOptions.openaiSet:
     st.title('Totally Not ChatGPT')
 
     # Model selection
-    model_selection = st.selectbox('Select the model:', ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-4'])
+    model_selection = st.selectbox('Select the model:', ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-4', 'gpt-4-1106-preview'])
 
     if st.button('Clear Conversation'):
         st.session_state.conversation = FullConversation()
