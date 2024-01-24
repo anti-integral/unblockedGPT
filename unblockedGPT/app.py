@@ -73,19 +73,30 @@ if st.session_state.pageOptions.openaiSet:
 
     if user_input and st.session_state.submitFlag:
         st.session_state.submitFlag = False
-        if openai_api_key != False:
+        if openai_api_key:
             openai.api_key = openai_api_key
-            try: 
+            try:
                 response = openai.ChatCompletion.create(
-                model=model_selection,
-                messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": user_input}]
-            )
-                chatbot_response = response['choices'][0]['message']['content'].strip()
-                st.session_state.conversation.addResponse(user_input, chatbot_response, 1, AIScore(ai_detection( chatbot_response, auth), ai_detection_2( chatbot_response, auth)))
-            except:
-                st.write("Invalid API Key")
+                    model=model_selection,
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant."},
+                        {"role": "user", "content": user_input}
+                    ]
+                )
+                chatbot_response = response.choices[0].message.content.strip()
+                st.session_state.conversation.addResponse(
+                    user_input, chatbot_response, 1,
+                    AIScore(
+                        ai_detection(chatbot_response, auth),
+                        ai_detection_2(chatbot_response, auth)
+                    )
+                )
+            except openai.error.InvalidRequestError:
+                st.error("Invalid API Key or other request error.")
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
         else:
-            st.write("Please enter an API Key")
+            st.warning("Please enter an API Key")
             
     # Rephrase button
     if st.button('Rephrase Text'):
